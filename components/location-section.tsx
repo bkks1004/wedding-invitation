@@ -13,7 +13,7 @@ const VENUE_INFO = {
   lat: 37.52373, // 위도
   lng: 126.87516, // 경도
   naverMapUrl: "https://naver.me/xyTG8t3T",
-  kakaoMapUrl: "https://kko.kakao.com/6FZ09-bQIv",
+  kakaoMapUrl: "https://kko.kakao.com/qdxlst3fgm",
   contact: "02-2644-7823",
 }
 
