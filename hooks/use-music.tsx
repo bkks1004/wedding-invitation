@@ -1,10 +1,13 @@
 "use client"
 
 import { createContext, useContext, useState, useRef, useEffect, ReactNode } from "react"
-import { useIsMobile } from "@/hooks/use-mobile"
+import { Button } from "@/components/ui/button"
+
+type MusicPreference = "play" | "dont-play" | null
 
 interface MusicContextType {
   isPlaying: boolean
+  showConsent: boolean
   togglePlay: () => void
   audioRef: React.RefObject<HTMLAudioElement | null>
 }
@@ -19,61 +22,69 @@ export const useMusic = () => {
   return context
 }
 
-interface MusicProviderProps {
-  children: ReactNode
-}
-
-export const MusicProvider = ({ children }: MusicProviderProps) => {
+export const MusicProvider = ({ children }: React.PropsWithChildren) => {
   const [isPlaying, setIsPlaying] = useState(false)
+  const [showConsent, setShowConsent] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
-  const isMobile = useIsMobile()
+
+  useEffect(() => {
+    const storedPref = localStorage.getItem("musicPreference") as MusicPreference
+
+    if (!storedPref) {
+      setShowConsent(true)
+    } else if (storedPref === "play") {
+      const playOnFirstInteraction = () => {
+        const audio = audioRef.current
+        if (audio && audio.paused) {
+          audio.play().catch(() => {})
+        }
+        window.removeEventListener("scroll", playOnFirstInteraction)
+        window.removeEventListener("click", playOnFirstInteraction)
+        window.removeEventListener("touchstart", playOnFirstInteraction)
+      }
+
+      window.addEventListener("scroll", playOnFirstInteraction, { once: true, passive: true })
+      window.addEventListener("click", playOnFirstInteraction, { once: true })
+      window.addEventListener("touchstart", playOnFirstInteraction, { once: true, passive: true })
+
+      return () => {
+        window.removeEventListener("scroll", playOnFirstInteraction)
+        window.removeEventListener("click", playOnFirstInteraction)
+        window.removeEventListener("touchstart", playOnFirstInteraction)
+      }
+    }
+  }, [])
+
+  const handleConsent = (consent: boolean) => {
+    const newPref: MusicPreference = consent ? "play" : "dont-play"
+    localStorage.setItem("musicPreference", newPref)
+    if (consent) {
+      audioRef.current?.play().catch(() => {})
+    }
+    setShowConsent(false)
+  }
 
   const togglePlay = () => {
     const audio = audioRef.current
     if (!audio) return
 
-    if (audio.paused) {
-      audio.play().catch((error) => {
-        console.error("Audio play failed on user interaction:", error)
-      })
+    const newPref: MusicPreference = audio.paused ? "play" : "dont-play"
+    localStorage.setItem("musicPreference", newPref)
+
+    if (newPref === "play") {
+      audio.play().catch(() => {})
     } else {
       audio.pause()
     }
   }
 
   useEffect(() => {
-    if (!isMobile) return
-
-    const playOnFirstInteraction = () => {
-      const audio = audioRef.current
-      // 사용자가 스크롤이나 터치를 시작했을 때, 오디오가 멈춰있으면 재생을 시도합니다.
-      if (audio && audio.paused) {
-        // 자동 재생 정책으로 인해 play()가 실패할 수 있으므로 catch()로 에러를 처리합니다.
-        audio.play().catch(() => {})
-      }
-    }
-
-    // 스크롤과 터치 이벤트에 리스너를 추가합니다. once: true로 첫 인터랙션 후에 자동 제거됩니다.
-    window.addEventListener("scroll", playOnFirstInteraction, { once: true, passive: true })
-    window.addEventListener("touchstart", playOnFirstInteraction, { once: true, passive: true })
-
-    return () => {
-      window.removeEventListener("scroll", playOnFirstInteraction)
-      window.removeEventListener("touchstart", playOnFirstInteraction)
-    }
-  }, [isMobile])
-
-  useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
-
     const handlePlay = () => setIsPlaying(true)
     const handlePause = () => setIsPlaying(false)
-
     audio.addEventListener("play", handlePlay)
     audio.addEventListener("pause", handlePause)
-
-    // 컴포넌트 언마운트 시 이벤트 리스너를 정리합니다.
     return () => {
       audio.removeEventListener("play", handlePlay)
       audio.removeEventListener("pause", handlePause)
@@ -81,14 +92,25 @@ export const MusicProvider = ({ children }: MusicProviderProps) => {
   }, [])
 
   return (
-    <MusicContext.Provider value={{ isPlaying, togglePlay, audioRef }}>
-      <audio
-        ref={audioRef}
-        src="/music/Its_Beginning_to_Look_a_Lot_Like_Christmas.mp3"
-        loop
-        preload="auto"
-      />
+    <MusicContext.Provider value={{ isPlaying, showConsent, togglePlay, audioRef }}>
+      <audio ref={audioRef} src="/music/Its_Beginning_to_Look_a_Lot_Like_Christmas.mp3" loop preload="auto" />
       {children}
+      {showConsent && (
+        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center backdrop-blur-sm">
+          <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm mx-4 text-center">
+            <h3 className="text-lg font-semibold text-stone-800 mb-2">배경 음악 안내</h3>
+            <p className="text-stone-600 mb-4 text-sm">배경 음악과 함께 청첩장을 감상하시겠어요?</p>
+            <div className="flex justify-center gap-3">
+              <Button onClick={() => handleConsent(true)} className="bg-amber-500 hover:bg-amber-600 text-white rounded-full px-6">
+                네, 들을래요
+              </Button>
+              <Button onClick={() => handleConsent(false)} variant="ghost" className="text-stone-500 hover:bg-stone-100 rounded-full px-6">
+                아니요
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </MusicContext.Provider>
   )
 }

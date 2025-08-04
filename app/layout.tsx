@@ -5,6 +5,7 @@ import './globals.css'
 import { customFont } from '@/lib/fonts'
 import { Toaster } from '@/components/ui/toaster'
 import { MusicProvider } from '@/hooks/use-music'
+import MusicToggleButton from '@/components/music-toggle-button'
 
 export const metadata: Metadata = {
   title: "오성 & 주은, 결혼합니다",
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body>
         <MusicProvider>
           {children}
+          <MusicToggleButton />
           <Toaster />
         </MusicProvider>
       </body>

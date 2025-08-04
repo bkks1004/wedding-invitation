@@ -80,18 +80,18 @@ export default function FloatingNavigation() {
             })}
 
             {/* 구분선 */}
-            <div className="w-px h-5 bg-stone-200 mx-1"></div>
+            {/*<div className="w-px h-5 bg-stone-200 mx-1"></div>*/}
 
             {/* 음악 제어 버튼 */}
-            <motion.button
-              onClick={togglePlay}
-              className="relative p-2 rounded-full text-stone-500 hover:text-amber-600 hover:bg-stone-100 transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              title={isPlaying ? "음악 일시정지" : "음악 재생"}
-            >
-              {isPlaying ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
-            </motion.button>
+            {/*<motion.button*/}
+            {/*  onClick={togglePlay}*/}
+            {/*  className="relative p-2 rounded-full text-stone-500 hover:text-amber-600 hover:bg-stone-100 transition-colors"*/}
+            {/*  whileHover={{ scale: 1.1 }}*/}
+            {/*  whileTap={{ scale: 0.95 }}*/}
+            {/*  title={isPlaying ? "음악 일시정지" : "음악 재생"}*/}
+            {/*>*/}
+            {/*  {isPlaying ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}*/}
+            {/*</motion.button>*/}
           </div>
         </div>
       </motion.nav>
