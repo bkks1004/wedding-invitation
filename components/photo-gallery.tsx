@@ -1,15 +1,27 @@
 "use client"
 
+import { useRef } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Pagination } from "swiper/modules"
 import "swiper/css"
 import "swiper/css/pagination"
 
 import Image from "next/image"
-import { motion, type Variants } from "framer-motion";
+import { motion, useInView, type Variants } from "framer-motion"
 import { Camera } from "lucide-react";
 
 const images = Array.from({ length: 15 }, (_, i) => `/images/gallery-${i + 1}.jpg`)
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.3,
+    },
+  },
+}
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -21,16 +33,23 @@ const itemVariants: Variants = {
 }
 
 export default function PhotoGallery() {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, margin: "-100px" })
+
   return (
-    <section className="py-20 px-6 bg-stone-50">
-      <div className="max-w-4xl mx-auto">
+    <section id="gallery" ref={ref} className="py-20 px-6 bg-stone-50">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
+        className="max-w-4xl mx-auto"
+      >
         <motion.div variants={itemVariants} className="text-center mb-12">
           <Camera className="w-8 h-8 text-amber-600 mx-auto mb-3" />
           <h2 className="text-2xl font-light text-stone-800" style={{ fontFamily: "var(--font-custom)" }}>Our Story</h2>
         </motion.div>
 
-
-        <div className="relative">
+        <motion.div variants={itemVariants} className="relative">
           <Swiper
             modules={[Pagination]}
             spaceBetween={0}
@@ -60,8 +79,8 @@ export default function PhotoGallery() {
               </SwiperSlide>
             ))}
           </Swiper>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   )
 }

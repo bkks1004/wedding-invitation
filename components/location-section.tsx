@@ -62,8 +62,8 @@ export default function LocationSection() {
     visible: {
       opacity: 1,
       transition: {
-        when: "beforeChildren",
-        staggerChildren: 0.2,
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
       },
     },
   }
