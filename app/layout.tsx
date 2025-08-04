@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "오성 & 주은, 결혼합니다",
     description: "2025년 12월 13일, 저희 두 사람의 새로운 시작을 함께 축복해주세요.",
-    images: ['/images/thumbnail.jpg'],
+    images: ['images/thumbnail.jpg'],
   },
 }
 
@@ -21,9 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={`${GeistSans.variable} ${GeistMono.variable}`}>
-      <head>
-        <link rel="icon" href="/favicon.png" sizes="any" />
-      </head>
+      <head />
       <body>
         {children}
         <Toaster />
