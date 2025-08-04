@@ -2,9 +2,11 @@
 
 import { motion, useScroll, useTransform } from "framer-motion"
 import { useState, useEffect, useRef } from "react"
+import { useIsMobile } from "@/hooks/use-mobile"
 import { Home, Eye, Calendar, Camera, MapPin, Gift, MessageCircle, Volume2, VolumeX } from "lucide-react"
 
 export default function FloatingNavigation() {
+  const isMobile = useIsMobile()
   const [activeSection, setActiveSection] = useState(0)
   const { scrollY } = useScroll()
   const opacity = useTransform(scrollY, [100, 200], [0, 1])
@@ -14,6 +16,13 @@ export default function FloatingNavigation() {
   const togglePlay = () => {
     setIsPlaying(!isPlaying)
   }
+
+  // 모바일 자동 음악 재생
+  useEffect(() => {
+    if (isMobile) {
+      setIsPlaying(true)
+    }
+  }, [isMobile])
 
   useEffect(() => {
     if (audioRef.current) {
