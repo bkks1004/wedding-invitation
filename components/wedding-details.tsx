@@ -2,7 +2,9 @@
 
 import { motion, useInView, type Variants } from "framer-motion"
 import { useRef } from "react"
-import { Calendar, Clock, MapPin } from "lucide-react"
+import { Calendar as CalendarIcon, Clock, MapPin } from "lucide-react"
+import CustomCalendar from "./custom-calendar"
+import DetailCard from "./detail-card"
 
 export default function WeddingDetails() {
   const ref = useRef<HTMLDivElement>(null)
@@ -28,6 +30,8 @@ export default function WeddingDetails() {
     },
   }
 
+  const weddingDate = new Date(2025, 11, 13)
+
   return (
     <section ref={ref} className="py-20 px-6 bg-stone-100/30">
       <motion.div
@@ -37,30 +41,23 @@ export default function WeddingDetails() {
         className="max-w-md mx-auto text-center"
       >
         <motion.div variants={itemVariants} className="text-center mb-12">
-          <Calendar className="w-8 h-8 text-amber-600 mx-auto mb-3" />
+          <CalendarIcon className="w-8 h-8 text-amber-600 mx-auto mb-3" />
           <h2 className="text-2xl font-light text-stone-800" style={{ fontFamily: "var(--font-custom)" }}>Wedding Details</h2>
         </motion.div>
 
         <div className="space-y-6">
           {/* Date & Time */}
-          <motion.div variants={itemVariants} className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-200">
-            <div className="flex items-center justify-center gap-3 mb-3">
-              <Clock className="w-5 h-5 text-amber-600" />
-              <h3 className="text-lg font-medium text-stone-800">일시</h3>
-            </div>
-            <p className="text-stone-700 mb-1">2025년 12월 13일 토요일</p>
-            <p className="text-stone-700">오후 3시 30분</p>
-          </motion.div>
+          <DetailCard variants={itemVariants} icon={Clock} title="일시">
+            <CustomCalendar weddingDate={weddingDate} />
+            <div className="w-1/4 h-px bg-stone-300 mx-auto my-4" />
+            <p className="text-stone-700">2025년 12월 13일 토요일 오후 3시 30분</p>
+          </DetailCard>
 
           {/* Location */}
-          <motion.div variants={itemVariants} className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-200">
-            <div className="flex items-center justify-center gap-3 mb-3">
-              <MapPin className="w-5 h-5 text-amber-600" />
-              <h3 className="text-lg font-medium text-stone-800">장소</h3>
-            </div>
+          <DetailCard variants={itemVariants} icon={MapPin} title="장소">
             <p className="text-stone-700 mb-1">로프트 가든 344</p>
             <p className="text-sm text-stone-600">서울 양천구 오목로 344 청학빌딩 10층</p>
-          </motion.div>
+          </DetailCard>
         </div>
 
         {/* Message */}
