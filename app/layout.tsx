@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
+import { customFont } from '@/lib/fonts'
 import { Toaster } from '@/components/ui/toaster'
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ko" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="ko" className={`${GeistSans.variable} ${GeistMono.variable} ${customFont.variable}`}>
       <head />
       <body>
         {children}

@@ -85,8 +85,8 @@ export default function MainVisual() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-light mb-4 tracking-wide text-stone-100"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+            className="text-4xl md:text-5xl font-medium mb-4 tracking-wide text-stone-100"
+            style={{ fontFamily: "var(--font-custom), serif" }}
           >
             Ohseong & Jueun
           </motion.h1>
@@ -98,7 +98,7 @@ export default function MainVisual() {
             transition={{ duration: 0.8, delay: 0.5 }}
             viewport={{ once: true }}
             className="text-lg md:text-xl font-light italic mb-8 relative px-8 text-stone-200"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+            style={{ fontFamily: "var(--font-custom), serif" }}
           >
             We are getting married
             {/* 장식 라인 */}
