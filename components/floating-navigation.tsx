@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion"
 import { useState, useEffect, useRef } from "react"
-import { Home, Eye, Calendar, Camera, MapPin, MessageCircle, Volume2, VolumeX } from "lucide-react"
+import { Home, Eye, Calendar, Camera, MapPin, Gift, MessageCircle, Volume2, VolumeX } from "lucide-react"
 
 export default function FloatingNavigation() {
   const [activeSection, setActiveSection] = useState(0)
@@ -31,6 +31,7 @@ export default function FloatingNavigation() {
     { icon: Calendar, label: "Details" },
     { icon: Camera, label: "Gallery" },
     { icon: MapPin, label: "Location" },
+    { icon: Gift, label: "Account" },
     { icon: MessageCircle, label: "Guestbook" },
   ]
 

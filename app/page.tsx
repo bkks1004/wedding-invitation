@@ -7,6 +7,7 @@ import HeroSection from "@/components/hero-section"
 import WeddingDetails from "@/components/wedding-details"
 import PhotoGallery from "@/components/photo-gallery"
 import LocationSection from "@/components/location-section"
+import AccountInfo from "@/components/account-info"
 import GuestBook from "@/components/guest-book"
 import FloatingNavigation from "@/components/floating-navigation"
 
@@ -29,13 +30,14 @@ export default function WeddingInvitation() {
       {/* Floating Navigation */}
       <FloatingNavigation />
 
-      {/* Main Content - 메인 사진을 첫 번째로 배치 */}
+      {/* Main Content */}
       <div className="relative z-10">
         <MainVisual />
         <HeroSection />
         <WeddingDetails />
         <PhotoGallery />
         <LocationSection />
+        <AccountInfo />
         <GuestBook />
       </div>
     </div>
