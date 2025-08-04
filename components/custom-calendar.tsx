@@ -35,7 +35,7 @@ export default function CustomCalendar({ weddingDate }: CustomCalendarProps) {
     <>
       <div className="text-center text-base font-semibold tracking-widest text-stone-700 mb-4">{monthName}</div>
       <div className="grid grid-cols-7 gap-1 text-center text-xs text-stone-500 mb-2">
-        {daysOfWeek.map((day) => (<div key={day}>{day}</div>))}
+        {daysOfWeek.map((day, index) => (<div key={index}>{day}</div>))}
       </div>
       <div className="grid grid-cols-7 gap-1">{calendarDays}</div>
     </>
