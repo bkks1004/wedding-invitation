@@ -1,16 +1,95 @@
 "use client"
 
 import { motion, useInView, type Variants } from "framer-motion"
-import { useRef, useState, useEffect, FormEvent } from "react"
+import { useRef, useState, useEffect, type FormEvent } from "react"
 import { format } from "date-fns"
 import { ko } from "date-fns/locale"
 import { addGuestMessage, getGuestMessages, type GuestMessage } from "@/lib/firestore"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Heart, MessageCircle, User } from "lucide-react"
+import {Heart, MessageCircle, User, Loader2, Gift} from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
+// --- 메시지 작성 폼 컴포넌트 ---
+const GuestBookForm = ({
+  name,
+  setName,
+  message,
+  setMessage,
+  isSubmitting,
+  onSubmit,
+  variants,
+}: {
+  name: string
+  setName: (value: string) => void
+  message: string
+  setMessage: (value: string) => void
+  isSubmitting: boolean
+  onSubmit: (e: FormEvent) => Promise<void>
+  variants: Variants
+}) => (
+  <motion.div variants={variants} className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-200 mb-8">
+    <div className="flex items-center gap-3 mb-4">
+      <MessageCircle className="w-5 h-5 text-amber-600" />
+      <h3 className="text-lg font-medium text-stone-800">축하 메시지</h3>
+    </div>
+    <form onSubmit={onSubmit} className="space-y-4">
+      <Input
+        placeholder="이름을 입력해주세요"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className="border-stone-300 focus:border-amber-500"
+        disabled={isSubmitting}
+      />
+      <Textarea
+        placeholder="따뜻한 축하의 마음을 남겨주세요"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        rows={4}
+        className="border-stone-300 focus:border-amber-500 resize-none"
+        disabled={isSubmitting}
+      />
+      <Button type="submit" disabled={isSubmitting} className="w-full bg-amber-600 hover:bg-amber-700 text-white">
+        {isSubmitting ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            등록 중...
+          </>
+        ) : (
+          "메시지 남기기"
+        )}
+      </Button>
+    </form>
+  </motion.div>
+)
+
+// --- 개별 메시지 아이템 컴포넌트 ---
+const MessageItem = ({ msg, index }: { msg: GuestMessage; index: number }) => {
+  const formatTimestamp = (timestamp: any): string => {
+    if (!timestamp) return ""
+    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp)
+    return format(date, "yyyy.MM.dd HH:mm", { locale: ko })
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="bg-white/80 rounded-xl p-4 shadow-sm border border-stone-200"
+    >
+      <div className="flex items-center gap-2 mb-2">
+        <User className="w-4 h-4 text-stone-500" />
+        <span className="text-sm font-medium text-stone-800">{msg.name}</span>
+        <span className="text-xs text-stone-500 ml-auto">{formatTimestamp(msg.timestamp)}</span>
+      </div>
+      <p className="text-sm text-stone-700 leading-relaxed">{msg.message}</p>
+    </motion.div>
+  )
+}
+
+// --- 메인 컴포넌트 ---
 export default function GuestBook() {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
@@ -22,25 +101,6 @@ export default function GuestBook() {
   const [loading, setLoading] = useState(true) // 메시지 목록 로딩 상태
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
-
-  // useEffect(() => {
-  //   const mockMessages: GuestMessage[] = [
-  //     {
-  //       id: "1",
-  //       name: "김철수",
-  //       message: "두 분의 결혼을 진심으로 축하드립니다! 행복하세요 💕",
-  //       timestamp: new Date("2025-12-10"),
-  //     },
-  //     {
-  //       id: "2",
-  //       name: "이영희",
-  //       message: "오랜 친구의 결혼식에 참석할 수 있어서 너무 기뻐요. 평생 행복하길 바라요!",
-  //       timestamp: new Date("2025-12-11"),
-  //     },
-  //   ]
-  //   setMessages(mockMessages)
-  // }, [])
 
   // Firestore에서 메시지를 가져오는 함수
   const fetchMessages = async () => {
@@ -97,12 +157,6 @@ export default function GuestBook() {
     }
   }
 
-  const formatTimestamp = (timestamp: any): string => {
-    if (!timestamp) return ""
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp)
-    return format(date, "yyyy.MM.dd HH:mm", { locale: ko })
-  }
-
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -124,78 +178,50 @@ export default function GuestBook() {
   }
 
   return (
-    <section ref={ref} className="py-20 px-6 bg-stone-100/30">
+    <section id="guestbook" ref={ref} className="py-20 px-6 bg-stone-100/30">
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
         className="max-w-md mx-auto"
       >
-        <motion.h2 variants={itemVariants} className="text-2xl font-light text-stone-800 text-center mb-12">
-          Guest Book
-        </motion.h2>
+        <motion.div variants={itemVariants} className="text-center mb-12">
+          <MessageCircle className="w-8 h-8 text-amber-600 mx-auto mb-3" />
+          <h2 className="text-2xl font-light text-stone-800" style={{ fontFamily: "var(--font-custom)" }}>Guest Book</h2>
+        </motion.div>
 
         {/* Message Form */}
-        <motion.div
+        <GuestBookForm
+          name={name}
+          setName={setName}
+          message={message}
+          setMessage={setMessage}
+          isSubmitting={isSubmitting}
+          onSubmit={handleSubmit}
           variants={itemVariants}
-          className="bg-white/80 rounded-2xl p-6 shadow-sm border border-stone-200 mb-8"
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <MessageCircle className="w-5 h-5 text-amber-600" />
-            <h3 className="text-lg font-medium text-stone-800">축하 메시지</h3>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              placeholder="이름을 입력해주세요"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="border-stone-300 focus:border-amber-500"
-            />
-            <Textarea
-              placeholder="따뜻한 축하의 마음을 남겨주세요"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              rows={4}
-              className="border-stone-300 focus:border-amber-500 resize-none"
-            />
-            <Button type="submit" disabled={isSubmitting} className="w-full bg-amber-600 hover:bg-amber-700 text-white">
-              {isSubmitting ? "등록 중..." : "메시지 남기기"}
-            </Button>
-          </form>
-        </motion.div>
+        />
 
         {/* Messages List */}
         <motion.div variants={itemVariants} className="space-y-4">
-
           {loading ? (
             <div className="text-center py-8 text-stone-600">
+              <Loader2 className="mx-auto h-6 w-6 animate-spin text-stone-400 mb-3" />
               <p>메시지를 불러오는 중입니다...</p>
             </div>
+          ) : error ? (
+            <div className="text-center py-8 text-red-600">{error}</div>
           ) : (
             <>
               <div className="flex items-center gap-2 mb-4">
                 <Heart className="w-4 h-4 text-amber-600 fill-current" />
                 <span className="text-sm text-stone-700">{messages.length}개의 축하 메시지</span>
               </div>
-
               {messages.length > 0 ? (
-                messages.map((msg, index) => (
-                  <motion.div
-                    key={msg.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="bg-white/80 rounded-xl p-4 shadow-sm border border-stone-200"
-                  >
-                    <div className="flex items-center gap-2 mb-2">
-                      <User className="w-4 h-4 text-stone-500" />
-                      <span className="text-sm font-medium text-stone-800">{msg.name}</span>
-                      <span className="text-xs text-stone-500 ml-auto">{formatTimestamp(msg.timestamp)}</span>
-                    </div>
-                    <p className="text-sm text-stone-700 leading-relaxed">{msg.message}</p>
-                  </motion.div>
-                ))
+                <div className="space-y-4">
+                  {messages.map((msg, index) => (
+                    <MessageItem key={msg.id} msg={msg} index={index} />
+                  ))}
+                </div>
               ) : (
                 <div className="text-center py-8">
                   <MessageCircle className="w-12 h-12 text-stone-400 mx-auto mb-3" />
