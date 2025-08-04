@@ -17,7 +17,7 @@ export default function MainVisual() {
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
 
   return (
-    <section ref={ref} className="relative h-screen overflow-hidden">
+    <section id="main" ref={ref} className="relative h-screen overflow-hidden">
       {/* 메인 배경 이미지 */}
       <motion.div className="absolute inset-0" style={{ y, scale }}>
         <Image

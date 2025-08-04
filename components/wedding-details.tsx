@@ -2,7 +2,7 @@
 
 import { motion, useInView, type Variants } from "framer-motion"
 import { useRef } from "react"
-import { Clock, MapPin, Users } from "lucide-react"
+import { Calendar, Clock, MapPin } from "lucide-react"
 
 export default function WeddingDetails() {
   const ref = useRef<HTMLDivElement>(null)
@@ -36,9 +36,10 @@ export default function WeddingDetails() {
         animate={isInView ? "visible" : "hidden"}
         className="max-w-md mx-auto text-center"
       >
-        <motion.h2 variants={itemVariants} className="text-2xl font-light text-stone-800 mb-12">
-          Wedding Details
-        </motion.h2>
+        <motion.div variants={itemVariants} className="text-center mb-12">
+          <Calendar className="w-8 h-8 text-amber-600 mx-auto mb-3" />
+          <h2 className="text-2xl font-light text-stone-800" style={{ fontFamily: "var(--font-custom)" }}>Wedding Details</h2>
+        </motion.div>
 
         <div className="space-y-6">
           {/* Date & Time */}

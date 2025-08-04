@@ -17,6 +17,7 @@ export default function HeroSection() {
 
   return (
     <section
+      id="hero"
       ref={ref}
       className="relative h-screen flex flex-col items-center justify-center overflow-hidden bg-stone-50"
     >

@@ -6,16 +6,29 @@ import "swiper/css"
 import "swiper/css/pagination"
 
 import Image from "next/image"
+import { motion, type Variants } from "framer-motion";
+import { Camera } from "lucide-react";
 
 const images = Array.from({ length: 15 }, (_, i) => `/images/gallery-${i + 1}.jpg`)
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+}
 
 export default function PhotoGallery() {
   return (
     <section className="py-20 px-6 bg-stone-50">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-light text-gray-800 text-center mb-10">
-          Our Story
-        </h2>
+        <motion.div variants={itemVariants} className="text-center mb-12">
+          <Camera className="w-8 h-8 text-amber-600 mx-auto mb-3" />
+          <h2 className="text-2xl font-light text-stone-800" style={{ fontFamily: "var(--font-custom)" }}>Our Story</h2>
+        </motion.div>
+
 
         <div className="relative">
           <Swiper

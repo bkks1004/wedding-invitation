@@ -78,16 +78,17 @@ export default function LocationSection() {
   }
 
   return (
-    <section ref={ref} className="py-20 px-6 bg-stone-50">
+    <section id="location" ref={ref} className="py-20 px-6 bg-stone-50">
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
         className="max-w-md mx-auto"
       >
-        <motion.h2 variants={itemVariants} className="text-2xl font-light text-stone-800 text-center mb-12">
-          Location
-        </motion.h2>
+        <motion.div variants={itemVariants} className="text-center mb-12">
+          <MapPin className="w-8 h-8 text-amber-600 mx-auto mb-3" />
+          <h2 className="text-2xl font-light text-stone-800" style={{ fontFamily: "var(--font-custom)" }}>Location</h2>
+        </motion.div>
 
         <Script
           strategy="afterInteractive"
