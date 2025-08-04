@@ -4,6 +4,7 @@ import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 import { customFont } from '@/lib/fonts'
 import { Toaster } from '@/components/ui/toaster'
+import { MusicProvider } from '@/hooks/use-music'
 
 export const metadata: Metadata = {
   title: "오성 & 주은, 결혼합니다",
@@ -24,8 +25,10 @@ export default function RootLayout({
     <html lang="ko" className={`${GeistSans.variable} ${GeistMono.variable} ${customFont.variable}`}>
       <head />
       <body>
-        {children}
-        <Toaster />
+        <MusicProvider>
+          {children}
+          <Toaster />
+        </MusicProvider>
       </body>
     </html>
   )
