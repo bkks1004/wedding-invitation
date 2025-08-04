@@ -108,7 +108,9 @@ export default function HeroSection() {
             <br />
             새롭게 시작하는 저희의 멋진 날,
             <br />
-            귀한 발걸음해 주시어 축복해 주시면 감사하겠습니다.
+            귀한 발걸음해 주시어
+            <br />
+            축복해 주시면 감사하겠습니다.
           </p>
         </motion.div>
       </motion.div>
