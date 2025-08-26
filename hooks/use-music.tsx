@@ -1,6 +1,14 @@
-"use client"
-
-import { createContext, useContext, useState, useRef, useEffect, ReactNode } from "react"
+import { createContext, useContext, useState, useRef, useEffect } from "react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 
 type MusicPreference = "play" | "dont-play" | null
@@ -95,22 +103,24 @@ export const MusicProvider = ({ children }: React.PropsWithChildren) => {
     <MusicContext.Provider value={{ isPlaying, showConsent, togglePlay, audioRef }}>
       <audio ref={audioRef} src="/music/Its_Beginning_to_Look_a_Lot_Like_Christmas.mp3" loop preload="auto" />
       {children}
-      {showConsent && (
-        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center backdrop-blur-sm">
-          <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm mx-4 text-center">
-            <h3 className="text-lg font-semibold text-stone-800 mb-2">배경 음악 안내</h3>
-            <p className="text-stone-600 mb-4 text-sm">배경 음악과 함께 청첩장을 감상하시겠어요?</p>
-            <div className="flex justify-center gap-3">
-              <Button onClick={() => handleConsent(true)} className="bg-amber-500 hover:bg-amber-600 text-white rounded-full px-6">
-                네, 들을래요
-              </Button>
-              <Button onClick={() => handleConsent(false)} variant="ghost" className="text-stone-500 hover:bg-stone-100 rounded-full px-6">
+      <AlertDialog open={showConsent} onOpenChange={setShowConsent}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>배경 음악 안내</AlertDialogTitle>
+            <AlertDialogDescription>청첩장과 어울리는 배경 음악과 함께 보실래요?</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel asChild>
+              <Button onClick={() => handleConsent(false)} variant="outline">
                 아니요
               </Button>
-            </div>
-          </div>
-        </div>
-      )}
+            </AlertDialogCancel>
+            <AlertDialogAction asChild>
+              <Button onClick={() => handleConsent(true)}>네, 들을래요</Button>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </MusicContext.Provider>
   )
 }
