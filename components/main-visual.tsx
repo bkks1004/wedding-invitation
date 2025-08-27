@@ -85,7 +85,7 @@ export default function MainVisual() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-medium mb-4 tracking-wide text-stone-100"
+            className="text-4xl md:text-6xl font-medium mb-6 tracking-wide text-stone-100"
             style={{ fontFamily: "var(--font-custom), serif" }}
           >
             Ohseong & Jueun
@@ -97,7 +97,7 @@ export default function MainVisual() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
             viewport={{ once: true }}
-            className="text-lg md:text-xl font-light italic mb-8 relative px-8 text-stone-200"
+            className="text-lg md:text-3xl font-light italic mb-8 relative px-8 text-stone-200"
             style={{ fontFamily: "var(--font-custom), serif" }}
           >
             We are getting married
