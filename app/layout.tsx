@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
-import { customFont } from '@/lib/fonts'
+import {customFont, maruBuri} from '@/lib/fonts'
 import { MusicProviderClient } from '@/components/music-provider-client'
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ko" className={`${GeistSans.variable} ${GeistMono.variable} ${customFont.variable}`}>
+    <html lang="ko" className={`${GeistSans.variable} ${GeistMono.variable} ${customFont.variable} ${maruBuri.variable}`}>
       <head />
       <body>
         <MusicProviderClient musicUrl="/music/Ferrari.mp3">{children}</MusicProviderClient>
