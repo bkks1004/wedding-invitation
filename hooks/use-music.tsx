@@ -30,7 +30,7 @@ export const useMusic = () => {
   return context
 }
 
-export const MusicProvider = ({ children }: React.PropsWithChildren) => {
+export const MusicProvider = ({ children, musicUrl }: React.PropsWithChildren<{ musicUrl?: string }>) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [showConsent, setShowConsent] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -101,7 +101,7 @@ export const MusicProvider = ({ children }: React.PropsWithChildren) => {
 
   return (
     <MusicContext.Provider value={{ isPlaying, showConsent, togglePlay, audioRef }}>
-      <audio ref={audioRef} src="/music/Its_Beginning_to_Look_a_Lot_Like_Christmas.mp3" loop preload="auto" />
+      {musicUrl && <audio ref={audioRef} src={musicUrl} loop preload="auto" />}
       {children}
       <AlertDialog open={showConsent} onOpenChange={setShowConsent}>
         <AlertDialogContent>
