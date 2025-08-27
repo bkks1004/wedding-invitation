@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="ko" className={`${GeistSans.variable} ${GeistMono.variable} ${customFont.variable}`}>
       <head />
       <body>
-        <MusicProviderClient musicUrl="/music/Its_Beginning_to_Look_a_Lot_Like_Christmas.mp3">{children}</MusicProviderClient>
+        <MusicProviderClient musicUrl="/music/Ferrari.mp3">{children}</MusicProviderClient>
       </body>
     </html>
   )
