@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Copy, Gift } from "lucide-react"
 
 const GROOM_ACCOUNTS = [
-  { name: "신랑 김오성", bank: "국민은행", accountNumber: "917702-01-28337" },
+  { name: "신랑 김오성", bank: "국민은행", accountNumber: "917702-01-283377" },
   { name: "아버지 김성대", bank: "신한은행", accountNumber: "407-12-029340" },
   { name: "어머니 곽현주", bank: "SC제일은행", accountNumber: "754-20-043803" },
 ]
